@@ -43,6 +43,7 @@ public class PlayerAttack : MonoBehaviour
             if (enemy.name == "Dummy")
             {
                 enemy.GetComponent<DummyEnemy>().TakeDamage();
+                //change to variable damage
                 return;
             }
             enemy.GetComponent < EnemyHP>().TakeDamage();

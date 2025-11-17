@@ -7,6 +7,7 @@ public class EnemyHP : MonoBehaviour
 
     public void TakeDamage()
     {
+        //change to variable damage
         healthBar.value -= 20;
         gameObject.GetComponentInChildren<ParticleSystem>().Play();
         Alive();
