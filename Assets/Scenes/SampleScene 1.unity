@@ -8290,6 +8290,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   reach: 1
+  damage: 20
   PlayerTransform: {fileID: 664562237}
 --- !u!82 &411501708
 AudioSource:
@@ -10015,11 +10016,11 @@ PrefabInstance:
       objectReference: {fileID: 872683471}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8597892699254683626, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Name
@@ -10544,11 +10545,11 @@ PrefabInstance:
       objectReference: {fileID: 872683471}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8597892699254683626, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Name
@@ -31008,6 +31009,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   reach: 1.8
+  damage: 20
   PlayerTransform: {fileID: 0}
 --- !u!114 &1101017949
 MonoBehaviour:
@@ -46433,11 +46435,11 @@ PrefabInstance:
       objectReference: {fileID: 872683471}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8597892699254683626, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Name
@@ -60041,11 +60043,11 @@ PrefabInstance:
       objectReference: {fileID: 872683471}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8597892699254683626, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Name
@@ -61979,6 +61981,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy
       objectReference: {fileID: 0}
+    - target: {fileID: 4096162324014617471, guid: c949c2d17c2d5e248a76564f0ee3120e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7415896122196954906, guid: c949c2d17c2d5e248a76564f0ee3120e, type: 3}
       propertyPath: m_Camera
       value: 
@@ -62259,11 +62265,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6893041585591549045, guid: 356844831ebea654d879315e5ab4b38f, type: 3}
       propertyPath: m_Direction

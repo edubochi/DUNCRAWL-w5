@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3339891668800040858}
   - component: {fileID: 8841023266857891387}
   - component: {fileID: 8676775919137397884}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4998,4 +4998,6 @@ MonoBehaviour:
   DropEffect: {fileID: 4690078501059019131, guid: 5b00e70cfb0569043b1eae7162747f24, type: 3}
   AoE: 1
   AoEradius: 1.5
-  damage: 0
+  damage: 45
+  stick: 0
+  charge: 0

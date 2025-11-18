@@ -18,6 +18,8 @@ public class Projectile : MonoBehaviour
     private bool _isCharging = false;
     private GameObject _projectileBullet;
 
+    float chargePercent;
+
     void Update()
     {
         if (_isChargingLaunch)
@@ -50,7 +52,7 @@ public class Projectile : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && _isCharging)
         {
             _isCharging = false;
-            float chargePercent = _currentChargeTime / _maxChargeTime;
+            chargePercent = _currentChargeTime / _maxChargeTime;
             float chargedSpeed = _speed * Mathf.Lerp(1f, _maxChargeMultiplier, chargePercent);
 
             Fire(_muzzlePosition.transform.position, _projectileWeaponPrefab, chargedSpeed);
@@ -61,6 +63,7 @@ public class Projectile : MonoBehaviour
     {
         _projectileBullet = Instantiate(_prefab, _Muzzle, transform.rotation);
         Rigidbody rb = _projectileBullet.GetComponent<Rigidbody>();
+        _projectileBullet.GetComponent<ShotScript>().charge = chargePercent;
 
         Vector3 dir = Camera.main.transform.forward;
 

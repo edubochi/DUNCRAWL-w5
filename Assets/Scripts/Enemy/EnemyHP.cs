@@ -5,10 +5,10 @@ public class EnemyHP : MonoBehaviour
 {
     public Slider healthBar;
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
         //change to variable damage
-        healthBar.value -= 20;
+        healthBar.value -= damage;
         gameObject.GetComponentInChildren<ParticleSystem>().Play();
         Alive();
     }

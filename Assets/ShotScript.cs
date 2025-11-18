@@ -10,20 +10,30 @@ public class ShotScript : MonoBehaviour
 
     public int damage;
 
+    public bool stick;
+
+    public float charge = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         particles = GetComponent<ParticleSystem>();
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        damage = Mathf.RoundToInt(damage + 2 * (damage * charge));
+
+        //Debug.Log(damage);
+
         if (AoE)
         {
             Collider[] hit = Physics.OverlapSphere(transform.position, AoEradius, LayerMask.GetMask("Enemy"));
@@ -32,24 +42,37 @@ public class ShotScript : MonoBehaviour
 
                 if (col.gameObject.layer == 9 && col.gameObject.GetComponent<EnemyHP>() != null)
                 {
-                    col.gameObject.GetComponent<EnemyHP>().TakeDamage();
+                    col.gameObject.GetComponent<EnemyHP>().TakeDamage(damage);
                 }
                 
                 //change to variable damage
             }
         }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            collision.gameObject.GetComponent<EnemyHP>().TakeDamage(damage);
 
-
+            if (stick)
+            {
+                transform.SetParent(collision.transform, true);
+            }
+        }
 
         if (particles != null)
         {
             particles.Stop();
         }
 
-        GameObject blast = Instantiate(DropEffect, transform.position, Quaternion.identity);
-        Destroy(blast, 0.5f);
+        if (DropEffect != null)
+        {
+            GameObject blast = Instantiate(DropEffect, transform.position, Quaternion.identity);
+            Destroy(blast, 0.5f);
+        }        
 
-        GetComponent<Light>().enabled = false;
+        if (GetComponent<Light>() != null)
+        {
+            GetComponent<Light>().enabled = false;
+        }
         GetComponent<Collider>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
         Destroy(gameObject, 1.5f);

@@ -10,6 +10,8 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask _enemyLayer;
     public float reach;
 
+    public int damage = 20;
+
     public Transform PlayerTransform;
     void Start()
     {
@@ -43,10 +45,9 @@ public class PlayerAttack : MonoBehaviour
             if (enemy.name == "Dummy")
             {
                 enemy.GetComponent<DummyEnemy>().TakeDamage();
-                //change to variable damage
                 return;
             }
-            enemy.GetComponent < EnemyHP>().TakeDamage();
+            enemy.GetComponent < EnemyHP>().TakeDamage(damage);
         }
     }
 }
