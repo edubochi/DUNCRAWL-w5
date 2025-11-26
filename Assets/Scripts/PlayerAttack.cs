@@ -13,19 +13,53 @@ public class PlayerAttack : MonoBehaviour
     public int damage = 20;
 
     public Transform PlayerTransform;
+
+    public Animator SwordAnim;
+    public float SwingDuration;
+    string currentstate;
+
+    bool stopSlash = true;
+
     void Start()
     {
-        
+        AnimatorStateInfo info = SwordAnim.GetCurrentAnimatorStateInfo(0);
+        currentstate = GetCurrentStateName(info);
     }
 
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        AnimatorStateInfo info = SwordAnim.GetCurrentAnimatorStateInfo(0);
+
+
+        if (Input.GetMouseButtonDown(0) && stopSlash)
         {
-            EnemyDetermine();
+            stopSlash = false;
         }
 
+        if (stopSlash)
+        {
+            SwordAnim.speed = 0f;
+        }
+        else
+        {
+            SwordAnim.speed = 1f;
+        }
+
+        if ((info.IsName(currentstate) == false) && GetCurrentStateName(info) == "Slash")
+        {
+            //just started slashing
+            EnemyDetermine();
+
+        }
+        if ((info.IsName(currentstate) == false) && GetCurrentStateName(info) == "Windup")
+        {
+            //just started windup
+            stopSlash = true;
+
+        }
+
+        currentstate = GetCurrentStateName(info);
     }
     private void OnDrawGizmos()
     {
@@ -49,5 +83,13 @@ public class PlayerAttack : MonoBehaviour
             }
             enemy.GetComponent < EnemyHP>().TakeDamage(damage);
         }
+    }
+
+    string GetCurrentStateName(AnimatorStateInfo info)
+    {
+        if (info.IsName("Windup")) return "Windup";
+        if (info.IsName("Slash")) return "Slash";
+        if (info.IsName("Recovery")) return "Recovery";
+        return "Unknown";
     }
 }

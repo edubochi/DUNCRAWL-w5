@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -18,7 +19,10 @@ public class Projectile : MonoBehaviour
     private bool _isCharging = false;
     private GameObject _projectileBullet;
 
-    float chargePercent;
+    float chargePercent = 0f;
+
+    public Animator BowAnim;
+    public GameObject Arrow;
 
     void Update()
     {
@@ -28,7 +32,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 Fire(_muzzlePosition.transform.position, _projectileWeaponPrefab, _speed);
             }
@@ -41,12 +45,15 @@ public class Projectile : MonoBehaviour
         {
             _isCharging = true;
             _currentChargeTime = 0f;
+
+            Invoke("ArrowParticles", _maxChargeTime);
         }
 
         if (Input.GetMouseButton(0) && _isCharging)
         {
             _currentChargeTime += Time.deltaTime;
-            _currentChargeTime = Mathf.Min(_currentChargeTime, _maxChargeTime); 
+            _currentChargeTime = Mathf.Min(_currentChargeTime, _maxChargeTime);
+            chargePercent = _currentChargeTime / _maxChargeTime;
         }
 
         if (Input.GetMouseButtonUp(0) && _isCharging)
@@ -55,7 +62,29 @@ public class Projectile : MonoBehaviour
             chargePercent = _currentChargeTime / _maxChargeTime;
             float chargedSpeed = _speed * Mathf.Lerp(1f, _maxChargeMultiplier, chargePercent);
 
-            Fire(_muzzlePosition.transform.position, _projectileWeaponPrefab, chargedSpeed);
+
+            if (chargePercent > 0.2f)
+            {
+                Fire(_muzzlePosition.transform.position, _projectileWeaponPrefab, chargedSpeed);
+            }
+            chargePercent = 0f;
+
+            CancelInvoke("ArrowParticles");
+        }
+
+        //bow visuals
+        BowAnim.Play("Draw", 0, chargePercent * 0.4f);
+
+        if (chargePercent == 0)
+        {
+            Arrow.SetActive(false);
+        }
+        else
+        {
+            Arrow.SetActive(true);
+            Vector3 arrowPos = Arrow.transform.localPosition;
+            arrowPos.z = 0 + (-0.4f * chargePercent);
+            Arrow.transform.localPosition = arrowPos;
         }
     }
 
@@ -72,5 +101,10 @@ public class Projectile : MonoBehaviour
             rb.linearVelocity = dir.normalized * _prefabSpeed;
             Destroy(_projectileBullet, _lifePeriod);
         }
+    }
+
+    void ArrowParticles()
+    {
+        Arrow.GetComponent<ParticleSystem>().Play();
     }
 }
