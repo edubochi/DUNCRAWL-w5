@@ -30,6 +30,8 @@ public class EnemyAi : MonoBehaviour
     public float AttackCooldown;
     float LastAttack = 0;
 
+    public int damage;
+
     Vector3 PrevPos;
 
     private void Awake()
@@ -67,11 +69,13 @@ public class EnemyAi : MonoBehaviour
         {
             gameObject.GetComponentInChildren<Animator>().SetTrigger("Attack");
             LastAttack = Time.time + AttackCooldown;
+
+            playerobject.GetComponent<PlayerHealth>().TakeDamage(damage);
         }
 
         //moving/idle anim
         if ((transform.position - PrevPos).magnitude != 0)
-        {    
+        {
             gameObject.GetComponentInChildren<Animator>().SetBool("Moving", true);
         }
         else

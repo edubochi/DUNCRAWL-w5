@@ -6408,6 +6408,7 @@ MonoBehaviour:
   distanceFromPlayer: 0
   AttackRange: 2.5
   AttackCooldown: 2
+  damage: 10
 --- !u!195 &8819271700381097359
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6465,3 +6466,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 6920432380159196183}
+  levelClearController: {fileID: 0}
