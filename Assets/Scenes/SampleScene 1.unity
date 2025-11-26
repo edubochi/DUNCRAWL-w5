@@ -8246,6 +8246,7 @@ GameObject:
   - component: {fileID: 411501707}
   - component: {fileID: 411501706}
   - component: {fileID: 411501714}
+  - component: {fileID: 411501715}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8260,7 +8261,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411501705}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d497832936a5ba48ac5c5803cdf3d17, type: 3}
   m_Name: 
@@ -8286,7 +8287,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   reach: 1
-  damage: 20
+  damage: 35
   PlayerTransform: {fileID: 664562237}
   SwordAnim: {fileID: 984451482}
   SwingDuration: 0
@@ -8541,6 +8542,24 @@ MonoBehaviour:
   stamRecharge: 10
   maxSlope: 0
   state: 0
+--- !u!114 &411501715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411501705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bbe71aaf508d3c4e806da87564b014b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  SwordObjs:
+  - {fileID: 1689000236}
+  attack: {fileID: 411501707}
+  BowObjs:
+  - {fileID: 1393467435}
+  shoot: {fileID: 664562238}
 --- !u!1 &415056039
 GameObject:
   m_ObjectHideFlags: 0
@@ -38147,6 +38166,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1388731850}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1393467435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0da04bf09238ccb4e869017f95ace7ce, type: 3}
+  m_PrefabInstance: {fileID: 2001778961}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1400797564
 GameObject:
   m_ObjectHideFlags: 0
