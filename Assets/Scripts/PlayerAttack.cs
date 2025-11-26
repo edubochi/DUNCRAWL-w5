@@ -9,70 +9,34 @@ public class PlayerAttack : MonoBehaviour
     public float _radius = 5.0f;
     public LayerMask _enemyLayer;
     public float reach;
-
-    public int damage = 20;
+    private float damage = 0;
 
     public Transform PlayerTransform;
-
-    public Animator SwordAnim;
-    public float SwingDuration;
-    string currentstate;
-
-    bool stopSlash = true;
-
     void Start()
     {
-        AnimatorStateInfo info = SwordAnim.GetCurrentAnimatorStateInfo(0);
-        currentstate = GetCurrentStateName(info);
+
     }
 
-    
+
     void Update()
     {
-        AnimatorStateInfo info = SwordAnim.GetCurrentAnimatorStateInfo(0);
-
-
-        if (Input.GetMouseButtonDown(0) && stopSlash)
+        if (Input.GetMouseButtonDown(0))
         {
-            stopSlash = false;
-        }
-
-        if (stopSlash)
-        {
-            SwordAnim.speed = 0f;
-        }
-        else
-        {
-            SwordAnim.speed = 1f;
-        }
-
-        if ((info.IsName(currentstate) == false) && GetCurrentStateName(info) == "Slash")
-        {
-            //just started slashing
             EnemyDetermine();
-
-        }
-        if ((info.IsName(currentstate) == false) && GetCurrentStateName(info) == "Windup")
-        {
-            //just started windup
-            stopSlash = true;
-
         }
 
-        currentstate = GetCurrentStateName(info);
     }
     private void OnDrawGizmos()
     {
         // Draw the sphere.
         Gizmos.DrawWireSphere(transform.position + (PlayerTransform.forward * reach), _radius);
 
-   
+
     }
 
     void EnemyDetermine()
     {
         _enemies = Physics.OverlapSphere(transform.position + (PlayerTransform.forward * reach), _radius, _enemyLayer);
-        // Get an array for the enemies
 
         foreach (Collider enemy in _enemies)
         {
@@ -81,15 +45,8 @@ public class PlayerAttack : MonoBehaviour
                 enemy.GetComponent<DummyEnemy>().TakeDamage();
                 return;
             }
-            enemy.GetComponent < EnemyHP>().TakeDamage(damage);
+            damage = 20f;
+            enemy.GetComponent<EnemyHP>().TakeDamage(damage);
         }
-    }
-
-    string GetCurrentStateName(AnimatorStateInfo info)
-    {
-        if (info.IsName("Windup")) return "Windup";
-        if (info.IsName("Slash")) return "Slash";
-        if (info.IsName("Recovery")) return "Recovery";
-        return "Unknown";
     }
 }
