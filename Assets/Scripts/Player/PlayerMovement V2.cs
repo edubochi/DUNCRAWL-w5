@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PlayerMovementV2 : MonoBehaviour
 {
     private float moveS;
@@ -31,7 +32,7 @@ public class PlayerMovementV2 : MonoBehaviour
     public float maxStam;
     public float stamDrain;
     public float stamRecharge;
-    bool sprinting = true;
+    bool sprinting = false;
 
     public float maxSlope;
     private RaycastHit slopeHit;
@@ -45,16 +46,23 @@ public class PlayerMovementV2 : MonoBehaviour
         air
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    float t = 0f;
+    float startValue;
+    float targetValue;
+
     void Start()
     {
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Dagger"), true);
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        
+
+        staminaBar.maxValue = maxStam;
+        staminaBar.minValue = 0;
+        staminaBar.value = currentStam;
+        startValue = currentStam;
+        targetValue = currentStam;
     }
 
-    // Update is called once per frame
     void Update()
     {
         onGround = Physics.Raycast(transform.position, Vector3.down, heightOfPlayer * 0.5f + 0.2f, ground);
@@ -63,7 +71,13 @@ public class PlayerMovementV2 : MonoBehaviour
         PlayerState();
         SprintBarUpdate();
 
-        staminaBar.value = currentStam;
+        if (t < 0.1f)
+        {
+            t += Time.deltaTime;
+            float n = t / 0.1f;
+            n = 1f - Mathf.Pow(1f - n, 3f);
+            staminaBar.value = Mathf.Lerp(startValue, targetValue, n);
+        }
 
         if (onGround)
         {
@@ -91,7 +105,6 @@ public class PlayerMovementV2 : MonoBehaviour
             Jump();
             Invoke(nameof(JumpReset), cooldownJump);
         }
-
     }
 
     private void PlayerState()
@@ -117,49 +130,61 @@ public class PlayerMovementV2 : MonoBehaviour
 
     private void SprintBarUpdate()
     {
-        if (sprinting && currentStam > 0)
+        if (sprinting)
         {
-            currentStam -= stamDrain * Time.deltaTime;
-            currentStam = Mathf.Clamp(currentStam, 0, maxStam);
+            float newStamina = currentStam - stamDrain * Time.deltaTime;
+            newStamina = Mathf.Clamp(newStamina, 0, maxStam);
+
+            if (newStamina != currentStam)
+            {
+                startValue = staminaBar.value;
+                targetValue = newStamina;
+                t = 0f;
+                currentStam = newStamina;
+            }
         }
+
         if (!sprinting && currentStam < maxStam)
         {
-            currentStam += stamRecharge * Time.deltaTime;
-            currentStam = Mathf.Clamp(currentStam, 0, maxStam);
+            float newStamina = currentStam + stamRecharge * Time.deltaTime;
+            newStamina = Mathf.Clamp(newStamina, 0, maxStam);
+
+            if (newStamina != currentStam)
+            {
+                startValue = staminaBar.value;
+                targetValue = newStamina;
+                t = 0f;
+                currentStam = newStamina;
+            }
         }
     }
-
 
     private void PlayerMovement()
     {
         moveDir = lookDir.forward * vertInput + lookDir.right * horiInput;
 
-        if (onGround)
+        if (PlayerOnSlope() && !slopeExit)
         {
-            rb.AddForce(moveDir.normalized * moveS * 10f, ForceMode.Force);
+            Vector3 slopeDirection = Vector3.ProjectOnPlane(moveDir, slopeHit.normal).normalized;
+            rb.AddForce(slopeDirection * moveS * 1000f, ForceMode.Force);
+        }
+        else if (onGround)
+        {
+            rb.AddForce(moveDir.normalized * moveS * 12f, ForceMode.Force);
         }
         else if (!onGround)
         {
-            rb.AddForce(moveDir.normalized * moveS * 10f * inAirMulti, ForceMode.Force);
-        }
-
-        if(PlayerOnSlope() && !slopeExit)
-        {
-            rb.AddForce(PlayerMoveDirSlope() * moveS * 20f, ForceMode.Force);
-
-            if(rb.linearVelocity.y > 0)
-            {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-            }
+            rb.AddForce(moveDir.normalized * moveS * 12f * inAirMulti, ForceMode.Force);
         }
 
         rb.useGravity = !PlayerOnSlope();
-
     }
 
     private bool PlayerOnSlope()
     {
-        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, heightOfPlayer * 0.5f + 0.3f))
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
+
+        if (Physics.Raycast(rayOrigin, Vector3.down, out slopeHit, heightOfPlayer * 0.5f + 0.4f, ground))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlope && angle != 0;
@@ -168,29 +193,14 @@ public class PlayerMovementV2 : MonoBehaviour
         return false;
     }
 
-    private Vector3 PlayerMoveDirSlope()
-    {
-        return Vector3.ProjectOnPlane(moveDir,slopeHit.normal).normalized;
-    }
-
     private void SpeedController()
     {
-        if (PlayerOnSlope() && !slopeExit)
-        {
-            if (rb.linearVelocity.magnitude > moveS)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * moveS;
-            }
-        }
-        else
-        {
-            Vector3 velocityFlat = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        Vector3 velocityFlat = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-            if (velocityFlat.magnitude > moveS)
-            {
-                Vector3 velocityLimit = velocityFlat.normalized * moveS;
-                rb.linearVelocity = new Vector3(velocityLimit.x, rb.linearVelocity.y, velocityLimit.z);
-            }
+        if (velocityFlat.magnitude > moveS)
+        {
+            Vector3 velocityLimit = velocityFlat.normalized * moveS;
+            rb.linearVelocity = new Vector3(velocityLimit.x, rb.linearVelocity.y, velocityLimit.z);
         }
     }
 
@@ -206,5 +216,4 @@ public class PlayerMovementV2 : MonoBehaviour
         slopeExit = false;
         jumpable = true;
     }
-
 }
